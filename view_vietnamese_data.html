@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vietnamese Administrative Divisions Viewer</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .city-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .city-button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      .city-button:hover {
+        background-color: #2980b9;
+      }
+      .details {
+        margin-top: 20px;
+      }
+      .district {
+        margin-bottom: 15px;
+        border-left: 3px solid #3498db;
+        padding-left: 10px;
+      }
+      .district-name {
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+      .wards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .ward {
+        background-color: #f1f1f1;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      .loading {
+        text-align: center;
+        padding: 20px;
+        font-style: italic;
+        color: #7f8c8d;
+      }
+      .error {
+        color: #e74c3c;
+        text-align: center;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Vietnamese Administrative Divisions Viewer</h1>
+
+      <div id="cityList" class="city-list">
+        <div class="loading">Loading cities...</div>
+      </div>
+
+      <div id="details" class="details"></div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const cityListElement = document.getElementById("cityList");
+        const detailsElement = document.getElementById("details");
+
+        // Fetch the JSON data
+        fetch(
+          "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            // Clear loading message
+            cityListElement.innerHTML = "";
+
+            // Create buttons for each city
+            data.forEach((city) => {
+              const button = document.createElement("button");
+              button.className = "city-button";
+              button.textContent = city.Name;
+              button.addEventListener("click", () => showCityDetails(city));
+              cityListElement.appendChild(button);
+            });
+
+            // Show the first city by default
+            if (data.length > 0) {
+              showCityDetails(data[0]);
+            }
+          })
+          .catch((error) => {
+            cityListElement.innerHTML = `<div class="error">Error loading data: ${error.message}</div>`;
+          });
+
+        function showCityDetails(city) {
+          // Clear previous details
+          detailsElement.innerHTML = "";
+
+          // Add city name as header
+          const cityHeader = document.createElement("h2");
+          cityHeader.textContent = city.Name;
+          detailsElement.appendChild(cityHeader);
+
+          // Add districts and wards
+          city.Districts.forEach((district) => {
+            const districtElement = document.createElement("div");
+            districtElement.className = "district";
+
+            const districtName = document.createElement("div");
+            districtName.className = "district-name";
+            districtName.textContent = district.Name;
+            districtElement.appendChild(districtName);
+
+            const wardsElement = document.createElement("div");
+            wardsElement.className = "wards";
+
+            district.Wards.forEach((ward) => {
+              const wardElement = document.createElement("div");
+              wardElement.className = "ward";
+              wardElement.textContent = ward.Name;
+              wardsElement.appendChild(wardElement);
+            });
+
+            districtElement.appendChild(wardsElement);
+            detailsElement.appendChild(districtElement);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

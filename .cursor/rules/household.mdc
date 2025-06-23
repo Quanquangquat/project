@@ -1,0 +1,18 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+
+# Your rule content
+
+Developing a permanent, temporary and temporary residence registration management application 
+Students rely on the suggested topics (for reference only) to design and build a complete permanent, temporary and temporary residence registration management application. 
+1. Technical and technological requirements 
+• Frontend: HTML5, CSS3, Bootstrap5, JavaScript. 
+• Backend: Servlet, JSP (using JSTL, Custom Tag), JDBC. • Database: SQL Server to store information. 
+• Model: MVC (Model-View-Controller). 
+• Authorization: Use Filter to control access rights. 
+• Interface: Friendly, intuitive, supported on both desktop and mobile devices (responsive)
+
+
