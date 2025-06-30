@@ -34,7 +34,7 @@ public class DBContext {
             // Database credentials
             String url = "jdbc:sqlserver://localhost:1433;databaseName=HouseholdManagement;encrypt=true;trustServerCertificate=true";
             String username = "sa";
-            String password = "ok";
+            String password = "123";
             
             // Establish connection
             this.connection = DriverManager.getConnection(url, username, password);
@@ -57,7 +57,7 @@ public class DBContext {
                 // Database credentials
                 String url = "jdbc:sqlserver://localhost:1433;databaseName=HouseholdManagement";
                 String username = "sa";
-                String password = "ok";
+                String password = "123";
                 
                 // Establish connection
                 this.connection = DriverManager.getConnection(url, username, password);

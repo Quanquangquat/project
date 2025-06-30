@@ -1,0 +1,51 @@
+# NetBeans
+nbproject/private/
+build/
+dist/
+nbbuild/
+nbdist/
+.nb-gradle/
+*.bak
+
+# Compiled class files
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDEs
+*.iml
+.idea/
+*.ipr
+*.iws
+.vscode/
+
+# User-specific files
+*.swp
+*~
+
+# Output folders
+/dist/
+/out/
+
+# Uploaded files
+web/uploads/
+
+# Ignore test output
+/test/
+
+# Ignore generated libraries
+lib/*.jar
+!lib/nblibraries.properties 
