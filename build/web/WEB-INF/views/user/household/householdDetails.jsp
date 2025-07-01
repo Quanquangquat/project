@@ -10,12 +10,72 @@
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
         <style>
+            :root {
+                --primary-color: #3498db;
+                --secondary-color: #2c3e50;
+                --accent-color: #e74c3c;
+                --light-bg: #f8f9fa;
+                --dark-bg: #343a40;
+            }
             body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background-color: #f5f7fa;
                 color: #333;
             }
-
+            .sidebar {
+                background-color: var(--secondary-color);
+                color: white;
+                height: 100vh;
+                position: fixed;
+                padding-top: 20px;
+                transition: all 0.3s;
+            }
+            .sidebar-header {
+                padding: 20px 15px;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            .sidebar-header h3 {
+                margin-bottom: 0;
+                font-size: 1.5rem;
+                color: white;
+            }
+            .sidebar .nav-link {
+                color: rgba(255,255,255,0.8);
+                padding: 12px 20px;
+                margin: 5px 0;
+                border-radius: 5px;
+                transition: all 0.2s;
+            }
+            .sidebar .nav-link:hover {
+                background-color: rgba(255,255,255,0.1);
+                color: white;
+            }
+            .sidebar .nav-link i {
+                margin-right: 10px;
+            }
+            .sidebar .nav-link.active {
+                background-color: var(--primary-color);
+                color: white;
+            }
+            .main-content {
+                margin-left: 250px;
+                padding: 20px;
+                transition: all 0.3s;
+            }
+            @media (max-width: 768px) {
+                .sidebar {
+                    width: 100%;
+                    height: auto;
+                    position: relative;
+                    margin-bottom: 20px;
+                }
+                .main-content {
+                    margin-left: 0;
+                }
+                .sidebar-header {
+                    text-align: center;
+                }
+            }
             .container {
                 max-width: 1200px;
                 margin: 40px auto;
@@ -132,22 +192,79 @@
     </head>
     <body>
 
+    <c:if test="${not empty sessionScope.loggedInUser}">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                    <div class="sidebar-header">
+                        <h3>Household Management</h3>
+                        <p class="text-light mb-0">Citizen Portal</p>
+                    </div>
+                    <div class="position-sticky pt-3">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/dashboard">
+                                    <i class="bi bi-house-door"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/userprofile/view">
+                                    <i class="bi bi-person"></i> My Profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <c:choose>
+                                    <c:when test="${not empty sessionScope.loggedInUser.householdId}">
+                                        <a class="nav-link active" href="${pageContext.request.contextPath}/household/view?householdId=${sessionScope.loggedInUser.householdId}">
+                                            <i class="bi bi-people"></i> Household Info
+                                        </a>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <a class="nav-link" href="${pageContext.request.contextPath}/household/create">
+                                            <i class="bi bi-people"></i> Create Household
+                                        </a>
+                                    </c:otherwise>
+                                </c:choose>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/registration/choose">
+                                    <i class="bi bi-file-earmark-text"></i> Registration Requests
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/citizen/viewReports">
+                                    <i class="bi bi-bar-chart"></i> Reports
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/citizen/viewAnnouncements">
+                                    <i class="bi bi-megaphone"></i> Announcements
+                                </a>
+                            </li>
+                            <li class="nav-item mt-5">
+                                <a class="nav-link text-danger" href="${pageContext.request.contextPath}/logout">
+                                    <i class="bi bi-box-arrow-right"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
 
-        <div class="container">
+                <!-- Main Content -->
+                <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
             <c:if test="${not empty success}">
                 <div class="alert alert-success" role="alert">
                     ${success}
                 </div>
                 <c:remove var="success" scope="session" />
             </c:if>
-
             <c:if test="${not empty error}">
                 <div class="alert alert-danger" role="alert">
                     ${error}
                 </div>
                 <c:remove var="error" scope="session" />
             </c:if>
-
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h2 class="mb-0">Household Details</h2>
@@ -184,22 +301,18 @@
                             </div>
                         </div>
                     </div>
-
                     <hr class="my-4">
-
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h3>Household Members</h3>
                         <a href="${pageContext.request.contextPath}/household/addMember" class="btn btn-primary">
                             <i class="bi bi-person-plus"></i> Add Member
                         </a>
                     </div>
-
                     <c:if test="${empty members}">
                         <div class="alert alert-info">
                             No members found for this household.
                         </div>
                     </c:if>
-
                     <c:if test="${not empty members}">
                         <div class="row">
                             <c:forEach var="member" items="${members}">
@@ -218,7 +331,6 @@
                                                 </button>
                                             </div>
                                         </div>
-
                                         <div class="collapse mt-3" id="memberDetails${member.memberId}">
                                             <div class="member-info">
                                                 <div><strong>Email:</strong> ${member.email}</div>
@@ -236,7 +348,6 @@
                                                     <div><strong>Phone:</strong> ${member.phoneNumber}</div>
                                                 </c:if>
                                             </div>
-
                                             <div class="mt-3">
                                                 <a href="${pageContext.request.contextPath}/household/updateMember?memberId=${member.memberId}"
                                                    class="btn btn-sm btn-outline-secondary">
@@ -258,8 +369,6 @@
                     </c:if>
                 </div>
             </div>
-        </div>
-
         <!-- Delete Confirmation Modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -282,6 +391,13 @@
                 </div>
             </div>
         </div>
+                    <footer class="mt-5 pt-3 border-top text-center text-muted">
+                        <p>&copy; 2023 Household Management System. All rights reserved.</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </c:if>
 
         <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -292,7 +408,6 @@
                     var button = $(event.relatedTarget);
                     var memberId = button.data('member-id');
                     var memberName = button.data('member-name');
-
                     $('#memberIdInput').val(memberId);
                     $('#memberNameSpan').text(memberName);
                 });

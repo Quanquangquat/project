@@ -18,6 +18,10 @@ import model.User;
 
 public class UserDAO extends DBContext {
 
+    public UserDAO() {
+        super();
+    }
+
     // Get all users
 //    public List<User> getAllUsers() {
 //        List<User> userList = new ArrayList<>();
