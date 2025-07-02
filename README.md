@@ -1,5 +1,5 @@
 # Vietnamese Administrative Divisions Importer
-acong
+
 This repository contains tools to import Vietnamese administrative divisions (provinces, districts, wards) into the `Areas` table of your Household Management database.
 
 ## Data Source
