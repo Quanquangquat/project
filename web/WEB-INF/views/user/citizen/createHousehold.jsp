@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Profile | Household Management</title>
+    <title>Create Household | Household Management</title>
     <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
@@ -143,12 +143,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="${pageContext.request.contextPath}/userprofile/update">
-                                <i class="bi bi-person"></i> Update Profile
+                            <a class="nav-link" href="${pageContext.request.contextPath}/userprofile/view">
+                                <i class="bi bi-person"></i> My Profile
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/household/create">
+                            <a class="nav-link active" href="${pageContext.request.contextPath}/household/create">
                                 <i class="bi bi-people"></i> Create Household
                             </a>
                         </li>
@@ -179,53 +179,130 @@
             <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
                 <!-- Page Header -->
                 <div class="page-header">
-                    <h1><i class="bi bi-person me-2"></i>Update Profile</h1>
-                    <p class="lead mb-0">Update your personal information</p>
+                    <h1><i class="bi bi-people me-2"></i>Create Household</h1>
+                    <p class="lead mb-0">Create a new household and manage its members</p>
                 </div>
                 <!-- Success/Error Messages -->
                 <c:if test="${not empty error}">
                     <div class="alert alert-danger">${error}</div>
                 </c:if>
-                <c:if test="${not empty success}">
-                    <div class="alert alert-success">${success}</div>
-                </c:if>
-                <!-- Form cập nhật thông tin cá nhân -->
+                <!-- Form tạo hộ khẩu -->
                 <div class="card mb-4">
-                    <div class="card-header">Update Profile</div>
+                    <div class="card-header">Create Household</div>
                     <div class="card-body">
-                        <form action="${pageContext.request.contextPath}/citizen/updateProfile" method="post">
-                            <div class="mb-3">
-                                <label for="fullName" class="form-label">Full Name</label>
-                                <input type="text" class="form-control" id="fullName" name="fullName" value="${sessionScope.loggedInUser.fullName}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" name="email" value="${sessionScope.loggedInUser.email}" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep current password">
-                            </div>
+                        <form action="${pageContext.request.contextPath}/household/create" method="post">
                             <div class="mb-3">
                                 <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" id="address" name="address" value="${sessionScope.loggedInUser.address}">
+                                <input type="text" class="form-control" id="address" name="address" required>
                             </div>
                             <div class="mb-3">
-                                <label for="gender" class="form-label">Gender</label>
-                                <select class="form-select" id="gender" name="gender">
-                                    <option value="">-- Select --</option>
-                                    <option value="Nam" <c:if test='${sessionScope.loggedInUser.gender == "Nam"}'>selected</c:if>>Nam</option>
-                                    <option value="Nữ" <c:if test='${sessionScope.loggedInUser.gender == "Nữ"}'>selected</c:if>>Nữ</option>
+                                <label for="areaId" class="form-label">Area</label>
+                                <select class="form-select" id="areaId" name="areaId" required>
+                                    <option value="">-- Select Area --</option>
+                                    <c:forEach var="area" items="${areas}">
+                                        <option value="${area.areaId}">${area.areaName}</option>
+                                    </c:forEach>
                                 </select>
                             </div>
-                            <div class="mb-3">
-                                <label for="phoneNumber" class="form-label">Phone Number</label>
-                                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="${sessionScope.loggedInUser.phoneNumber}">
-                            </div>
-                            <button type="submit" class="btn btn-custom-primary">Update Profile</button>
+                            <button type="submit" class="btn btn-custom-primary">Create Household</button>
                         </form>
                     </div>
                 </div>
+                <!-- Form thêm thành viên vào hộ khẩu (chỉ hiển thị nếu đã có householdId) -->
+                <c:if test="${not empty householdId}">
+                <div class="card mb-4">
+                    <div class="card-header">Add Household Member</div>
+                    <div class="card-body">
+                        <form action="${pageContext.request.contextPath}/member/add" method="post">
+                            <input type="hidden" name="householdId" value="${householdId}">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="fullName" class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" id="fullName" name="fullName" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-select" id="gender" name="gender" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="relationship" class="form-label">Relationship</label>
+                                    <select class="form-select" id="relationship" name="relationship" required>
+                                        <option value="">-- Select --</option>
+                                        <option value="Chủ hộ">Chủ hộ</option>
+                                        <option value="Vợ/Chồng">Vợ/Chồng</option>
+                                        <option value="Con cái">Con cái</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label for="dateOfBirth" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dateOfBirth" name="dateOfBirth" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="phoneNumber" class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="cccd" class="form-label">CCCD</label>
+                                <input type="text" class="form-control" id="cccd" name="cccd">
+                            </div>
+                            <button type="submit" class="btn btn-custom-primary">Add Member</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- Danh sách thành viên trong hộ khẩu -->
+                <div class="card">
+                    <div class="card-header">Household Members</div>
+                    <div class="card-body">
+                        <c:choose>
+                            <c:when test="${empty members}">
+                                <p class="text-center text-muted">No members in this household.</p>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Full Name</th>
+                                                <th>Gender</th>
+                                                <th>Relationship</th>
+                                                <th>Date of Birth</th>
+                                                <th>Phone</th>
+                                                <th>Email</th>
+                                                <th>CCCD</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="member" items="${members}">
+                                                <tr>
+                                                    <td>${member.fullName}</td>
+                                                    <td>${member.gender}</td>
+                                                    <td>${member.relationship}</td>
+                                                    <td><fmt:formatDate value="${member.dateOfBirth}" pattern="dd/MM/yyyy" /></td>
+                                                    <td>${member.phoneNumber}</td>
+                                                    <td>${member.email}</td>
+                                                    <td>${member.cccd}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
+                </div>
+                </c:if>
                 <!-- Footer -->
                 <footer class="mt-5 pt-3 border-top text-center text-muted">
                     <p>&copy; 2023 Household Management System. All rights reserved.</p>
@@ -236,4 +313,4 @@
 </c:if>
 <script src="${pageContext.request.contextPath}/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> 

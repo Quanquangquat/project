@@ -78,7 +78,9 @@ public class CitizenController extends HttpServlet {
             case "/citizen/viewAnnouncements":
                 handleViewAnnouncements(request, response);
                 break;
-
+            case "/citizen/transferHousehold":
+                handleTransferHousehold(request, response);
+                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Invalid citizen action");
                 break;
@@ -169,6 +171,42 @@ public class CitizenController extends HttpServlet {
     private void handleViewAnnouncements(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/views/user/citizen/viewAnnouncements.jsp").forward(request, response);
+    }
+
+    private void handleTransferHousehold(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+        if ("GET".equalsIgnoreCase(request.getMethod())) {
+            // Lấy lịch sử chuyển hộ khẩu của user
+            List<HouseholdTransfer> transferHistory = transferDAO.getTransferRequestsByUserId(loggedInUser.getUserId());
+            request.setAttribute("transferHistory", transferHistory);
+            request.getRequestDispatcher("/WEB-INF/views/user/citizen/transferHousehold.jsp").forward(request, response);
+        } else if ("POST".equalsIgnoreCase(request.getMethod())) {
+            String currentAddress = request.getParameter("currentAddress");
+            String destinationAddress = request.getParameter("destinationAddress");
+            String reason = request.getParameter("reason");
+            // Tạo đối tượng chuyển hộ khẩu mới
+            HouseholdTransfer transfer = new HouseholdTransfer();
+            transfer.setUserId(loggedInUser.getUserId());
+            transfer.setCurrentAddress(currentAddress);
+            transfer.setDestinationAddress(destinationAddress);
+            transfer.setReason(reason);
+            transfer.setRequestDate(new Date());
+            transfer.setStatus("Pending");
+            // Lưu vào DB
+            boolean success = transferDAO.addTransferRequest(transfer);
+            if (success) {
+                session.setAttribute("successMessage", "Transfer request submitted successfully!");
+            } else {
+                session.setAttribute("errorMessage", "Failed to submit transfer request. Please try again.");
+            }
+            response.sendRedirect(request.getContextPath() + "/citizen/transferHousehold");
+        }
     }
 
     @Override

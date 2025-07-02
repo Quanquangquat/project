@@ -230,11 +230,6 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="${pageContext.request.contextPath}/citizen/viewReports">
-                                        <i class="bi bi-bar-chart"></i> Reports
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link" href="${pageContext.request.contextPath}/citizen/viewAnnouncements">
                                         <i class="bi bi-megaphone"></i> Announcements
                                     </a>

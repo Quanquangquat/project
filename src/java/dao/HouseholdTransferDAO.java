@@ -213,6 +213,30 @@ public class HouseholdTransferDAO extends DBContext {
     }
     
     /**
+     * Thêm yêu cầu chuyển hộ khẩu mới (không cần destinationAreaId)
+     * @param transfer Đối tượng chuyển hộ khẩu
+     * @return true nếu thành công, false nếu thất bại
+     */
+    public boolean addTransferRequest(HouseholdTransfer transfer) {
+        String query = "INSERT INTO HouseholdTransfers (UserID, CurrentAddress, DestinationAddress, Reason, Status, RequestDate) " +
+                       "VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, transfer.getUserId());
+            ps.setString(2, transfer.getCurrentAddress());
+            ps.setString(3, transfer.getDestinationAddress());
+            ps.setString(4, transfer.getReason());
+            ps.setString(5, transfer.getStatus());
+            ps.setTimestamp(6, new Timestamp(transfer.getRequestDate().getTime()));
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException ex) {
+            Logger.getLogger(HouseholdTransferDAO.class.getName()).log(Level.SEVERE,
+                    "Error adding transfer request: " + ex.getMessage(), ex);
+        }
+        return false;
+    }
+    
+    /**
      * Helper method to map a ResultSet to a HouseholdTransfer object
      * @param rs The ResultSet
      * @return The HouseholdTransfer object
