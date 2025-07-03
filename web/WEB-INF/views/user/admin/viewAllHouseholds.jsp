@@ -277,16 +277,6 @@
                                     <i class="bi bi-megaphone"></i> Announcements
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/user/userProfile.jsp">
-                                    <i class="bi bi-person-circle"></i> My Profile
-                                </a>
-                            </li>
-                            <li class="nav-item mt-5">
-                                <a class="nav-link text-danger" href="${pageContext.request.contextPath}/logout">
-                                    <i class="bi bi-box-arrow-right"></i> Logout
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -452,7 +442,7 @@
                                                         <td><fmt:formatDate value="${household.createdDate}" pattern="dd MMM yyyy" /></td>
                                                         <td>
                                                             <div class="action-buttons">
-                                                                <a href="${pageContext.request.contextPath}/admin/viewHousehold?id=${household.householdId}" class="btn btn-sm btn-outline-primary btn-action" title="View Details">
+                                                                <a href="${pageContext.request.contextPath}/household/view?id=${household.householdId}" class="btn btn-sm btn-outline-primary btn-action" title="View Details">
                                                                     <i class="bi bi-eye"></i>
                                                                 </a>
                                                                 <a href="${pageContext.request.contextPath}/admin/manageHouseholds?edit=${household.householdId}" class="btn btn-sm btn-outline-secondary btn-action" title="Edit Household">
@@ -516,7 +506,7 @@
 
                     <!-- Footer -->
                     <footer class="mt-5 pt-3 border-top text-center text-muted">
-                        <p>&copy; 2023 Household Management System. All rights reserved.</p>
+                        <p>&copy; 2025 Household Management System. All rights reserved.</p>
                     </footer>
                 </div>
             </div>

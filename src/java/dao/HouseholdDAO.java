@@ -15,6 +15,7 @@ import model.User;
 import model.HouseholdMember;
 
 public class HouseholdDAO extends DBContext {
+   
 
     private static final Logger LOGGER = Logger.getLogger(HouseholdDAO.class.getName());
 

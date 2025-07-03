@@ -338,16 +338,6 @@
                                     <i class="bi bi-megaphone"></i> Announcements
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="${pageContext.request.contextPath}/user/userProfile.jsp">
-                                    <i class="bi bi-person-circle"></i> My Profile
-                                </a>
-                            </li>
-                            <li class="nav-item mt-5">
-                                <a class="nav-link text-danger" href="${pageContext.request.contextPath}/logout">
-                                    <i class="bi bi-box-arrow-right"></i> Logout
-                                </a>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -487,7 +477,7 @@
                                                         <td>
                                                             <div class="action-buttons">
                                                                 <button class="btn btn-sm btn-outline-primary btn-action" title="View Details"
-                                                                        onclick="location.href='${pageContext.request.contextPath}/admin/viewHousehold?id=${household.householdId}'">
+                                                                        onclick="location.href='${pageContext.request.contextPath}/household/view?id=${household.householdId}'">
                                                                     <i class="bi bi-eye"></i>
                                                                 </button>
                                                                 <button class="btn btn-sm btn-outline-warning btn-action" title="Edit Household"

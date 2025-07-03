@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpSession;
 //import java.lang.System.Logger.Level;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.HouseholdMember;
 
 @WebServlet(name = "AdminController", urlPatterns = {
     "/admin/viewAllUsers",
@@ -30,7 +31,8 @@ import java.util.logging.Logger;
     "/admin/generateReports",
     "/admin/manageAnnouncements",
     "/admin/viewProfile",
-    "/admin/updateProfile"
+    "/admin/updateProfile",
+        
 })
 public class AdminController extends HttpServlet {
 
@@ -286,33 +288,6 @@ public class AdminController extends HttpServlet {
                         }
                         break;
 
-//                    case "update":
-//                        int userId = Integer.parseInt(request.getParameter("userId"));
-//                        User existingUser = userDAO.getUserById(userId);
-//                        if (existingUser != null) {
-//                            existingUser.setFullName(request.getParameter("fullName"));
-//                            existingUser.setEmail(request.getParameter("email"));
-//                            String newPassword = request.getParameter("password");
-//                            if (newPassword != null && !newPassword.isEmpty()) {
-//                                existingUser.setPassword(newPassword);
-//                            }
-//                            existingUser.setRoleId(Integer.parseInt(request.getParameter("role")));
-//                            existingUser.setAddress(request.getParameter("address"));
-//                            existingUser.setCccd(request.getParameter("cccd"));
-//                            existingUser.setGender(request.getParameter("gender"));
-//                            existingUser.setPhoneNumber(request.getParameter("phoneNumber"));
-//
-//                            boolean updated = userDAO.updateUser(existingUser);
-//                            if (updated) {
-//                                message = "User updated successfully.";
-//                            } else {
-//                                message = "Failed to update user.";
-//                            }
-//                        } else {
-//                            message = "User with ID " + userId + " not found.";
-//                        }
-//                        break;
-
                     case "delete":
                         String deleteUserIdStr = request.getParameter("deleteuser");
                     if (deleteUserIdStr == null || deleteUserIdStr.trim().isEmpty()) {
@@ -387,7 +362,8 @@ public class AdminController extends HttpServlet {
         request.setAttribute("householdsList", households);
         request.getRequestDispatcher("/WEB-INF/views/user/admin/viewAllHouseholds.jsp").forward(request, response);
     }
-
+    
+    
     private void handleManageHouseholds(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         if ("GET".equalsIgnoreCase(request.getMethod())) {
@@ -396,6 +372,7 @@ public class AdminController extends HttpServlet {
             request.setAttribute("householdsList", households);
             request.setAttribute("usersList", users);
             request.getRequestDispatcher("/WEB-INF/views/user/admin/manageHouseholds.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/user/admin/viewHousehold.jsp").forward(request, response);
         } else if ("POST".equalsIgnoreCase(request.getMethod())) {
             String action = request.getParameter("action");
             String message;
